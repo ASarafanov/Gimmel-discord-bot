@@ -9,3 +9,8 @@ venv/
 
 # Local env files
 .env
+
+# Local build/runtime artifacts
+Gimmel-bot/build/
+Gimmel-bot/src/*.egg-info/
+Gimmel-bot/*.db
