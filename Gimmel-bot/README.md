@@ -71,23 +71,23 @@ PYTHONPATH=src pytest
 
 Админ-команды:
 
-- `/absence add`
-- `/absence remove`
-- `/absence list`
-- `/absence enable`
-- `/absence disable`
-- `/absence configure-channel`
-- `/absence set-timezone`
-- `/absence set-template`
-- `/absence set-post-mode`
-- `/absence set-mention-mode`
-- `/absence run`
+- `/absence add user:<user> [display_name_override:<text>]` - добавить пользователя в отслеживание.
+- `/absence remove user:<user>` - убрать пользователя из отслеживания.
+- `/absence list [page:<int>]` - показать список отслеживаемых пользователей и их статус.
+- `/absence enable` - включить ежедневную отправку отчётов для сервера.
+- `/absence disable` - отключить ежедневную отправку отчётов для сервера.
+- `/absence configure-channel channel:<text_channel>` - выбрать канал, куда бот публикует отчёты.
+- `/absence set-timezone tz:<IANA_TZ>` - установить таймзону сервера (например, `Europe/Moscow`).
+- `/absence set-template template:<text>` - задать шаблон текста отчёта.
+- `/absence set-post-mode mode:<single|per_user>` - выбрать формат публикации: один сводный пост или отдельный пост по каждому пользователю.
+- `/absence set-mention-mode mode:<no_ping|ping>` - включить/выключить реальные пинги пользователей.
+- `/absence run` - вручную запустить отчёт прямо сейчас (имитация плановой отправки).
 
 Пользовательские:
 
-- `/absence optout`
-- `/absence status`
-- `/absence privacy`
+- `/absence optout mode:<enable|disable> [reason:<text>]` - включить или выключить отказ от отслеживания себя.
+- `/absence status` - показать, отслеживается ли пользователь, есть ли opt-out и какая дата последнего визита сохранена.
+- `/absence privacy` - показать, какие данные хранит бот и как работает политика удаления.
 
 ## Как пригласить бота на сервер
 
