@@ -72,6 +72,7 @@ PYTHONPATH=src pytest
 
 Админ-команды и примеры:
 
+- `/absence help` - показать встроенный гайд по всем командам, аргументам и шаблонам. Пример: `/absence help`.
 - `/absence add user:<user> [display_name_override:<text>]` - добавить пользователя в отслеживание. Пример: `/absence add user:@Valeria display_name_override:Валерий`.
 - `/absence remove user:<user>` - убрать пользователя из отслеживания. Пример: `/absence remove user:@Valeria`.
 - `/absence list [page:<int>]` - показать список отслеживаемых пользователей и их статус. Пример: `/absence list page:1`.

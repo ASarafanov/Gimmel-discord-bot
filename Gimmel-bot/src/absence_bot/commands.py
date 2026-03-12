@@ -6,6 +6,7 @@ import discord
 from discord import app_commands
 
 from absence_bot.models import GuildSettings, MentionMode, PostMode, TrackMode, TrackedUser
+from absence_bot.templates import chunk_lines
 from absence_bot.time_utils import format_local_date, now_utc, utc_iso, validate_daily_time, validate_timezone
 
 
@@ -30,6 +31,10 @@ class AbsenceCommandRegistrar:
 
     def register(self, bot: discord.Client) -> None:
         group = app_commands.Group(name="absence", description="Управление отчётами отсутствия")
+
+        @group.command(name="help", description="Показать гайд по командам и примерам")
+        async def help_command(interaction: discord.Interaction) -> None:
+            await self._send_ephemeral_help(interaction)
 
         @group.command(name="add", description="Добавить пользователя в отслеживание")
         @app_commands.describe(user="Пользователь", display_name_override="Имя в отчёте")
@@ -324,3 +329,41 @@ class AbsenceCommandRegistrar:
         await self._storage.guild_settings.upsert(settings)
         await self._scheduler.reload_jobs()
         return settings
+
+    async def _send_ephemeral_help(self, interaction: discord.Interaction) -> None:
+        lines = self._help_guide_text().splitlines()
+        chunks = chunk_lines(lines, max_len=1900)
+        if not chunks:
+            chunks = ["Гайд недоступен."]
+
+        await interaction.response.send_message(chunks[0], ephemeral=True)
+        for chunk in chunks[1:]:
+            await interaction.followup.send(chunk, ephemeral=True)
+
+    def _help_guide_text(self) -> str:
+        return (
+            "**/absence help — гайд**\n"
+            "Подсчёт дней: только voice/stage. Точка отсчёта — выход из голосового.\n"
+            "Дни = полные 24 часа после выхода (до 24ч будет 0).\n\n"
+            "**Админ-команды**\n"
+            "/absence add user:@Valeria display_name_override:Валерий\n"
+            "/absence remove user:@Valeria\n"
+            "/absence list page:1\n"
+            "/absence enable\n"
+            "/absence disable\n"
+            "/absence configure-channel channel:#daily-absence\n"
+            "/absence set-timezone tz:Europe/Moscow\n"
+            "/absence set-template template:Прошло **{days} {days_word}** с момента как {user_mention} покинул нас.\n"
+            "/absence set-post-mode mode:single\n"
+            "/absence set-mention-mode mode:no_ping\n"
+            "/absence run\n\n"
+            "**Пользовательские команды**\n"
+            "/absence optout mode:enable reason:Не хочу участвовать\n"
+            "/absence status\n"
+            "/absence privacy\n\n"
+            "**Плейсхолдеры шаблона**\n"
+            "{days}, {days_word}, {display_name}, {user_id}, {user_mention}, {last_seen_date}, {last_seen_channel_id}\n"
+            "Чтобы упомянуть пользователя в шаблоне используйте {user_mention}.\n"
+            "Если mode:no_ping, упоминание без уведомления; если mode:ping, с уведомлением.\n"
+            "Текстовые сообщения не влияют на счётчик дней."
+        )
