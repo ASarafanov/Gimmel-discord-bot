@@ -9,11 +9,20 @@ def classify_voice_transition(
     before_channel_id: Optional[str],
     after_channel_id: Optional[str],
 ) -> VoiceTransition:
-    if before_channel_id is None and after_channel_id is not None:
+    if before_channel_id is not None and after_channel_id is None:
         return VoiceTransition(
             should_update=True,
-            event_type=LastSeenType.VOICE_JOIN,
+            event_type=LastSeenType.VOICE_LEAVE,
+            new_last_voice_channel_id=None,
+            last_seen_channel_id=before_channel_id,
+        )
+
+    if before_channel_id is None and after_channel_id is not None:
+        return VoiceTransition(
+            should_update=False,
+            event_type=None,
             new_last_voice_channel_id=after_channel_id,
+            last_seen_channel_id=None,
         )
 
     if (
@@ -22,13 +31,15 @@ def classify_voice_transition(
         and before_channel_id != after_channel_id
     ):
         return VoiceTransition(
-            should_update=True,
-            event_type=LastSeenType.VOICE_MOVE,
+            should_update=False,
+            event_type=None,
             new_last_voice_channel_id=after_channel_id,
+            last_seen_channel_id=None,
         )
 
     return VoiceTransition(
         should_update=False,
         event_type=None,
         new_last_voice_channel_id=after_channel_id,
+        last_seen_channel_id=None,
     )

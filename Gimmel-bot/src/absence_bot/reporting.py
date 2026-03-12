@@ -141,7 +141,7 @@ class ReportService:
         if transition.should_update:
             current_activity.last_seen_at_utc = utc_iso()
             current_activity.last_seen_type = transition.event_type
-            current_activity.last_seen_channel_id = after_channel_id
+            current_activity.last_seen_channel_id = transition.last_seen_channel_id
 
         current_activity.last_voice_channel_id = transition.new_last_voice_channel_id
         current_activity.updated_at_utc = utc_iso()

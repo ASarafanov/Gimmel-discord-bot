@@ -17,7 +17,7 @@ class DummySender:
 
 
 @pytest.mark.asyncio
-async def test_handle_voice_state_updates_only_on_join_or_move(tmp_path: Path) -> None:
+async def test_handle_voice_state_updates_only_on_leave(tmp_path: Path) -> None:
     storage = SqliteStorage(str(tmp_path / "voice.db"))
     await storage.initialize()
 
@@ -51,8 +51,9 @@ async def test_handle_voice_state_updates_only_on_join_or_move(tmp_path: Path) -
     await service.handle_voice_state_update("1", "100", None, "c1", "Val")
     activity_1 = await storage.activity.get("1", "100")
     assert activity_1 is not None
-    assert activity_1.last_seen_channel_id == "c1"
+    assert activity_1.last_seen_channel_id is None
     first_seen = activity_1.last_seen_at_utc
+    assert first_seen is None
 
     await service.handle_voice_state_update("1", "100", "c1", "c1", "Val")
     activity_2 = await storage.activity.get("1", "100")
@@ -62,8 +63,15 @@ async def test_handle_voice_state_updates_only_on_join_or_move(tmp_path: Path) -
     await service.handle_voice_state_update("1", "100", "c1", "c2", "Val")
     activity_3 = await storage.activity.get("1", "100")
     assert activity_3 is not None
-    assert activity_3.last_seen_channel_id == "c2"
-    assert activity_3.last_seen_type is not None
-    assert activity_3.last_seen_type.value == "voice_move"
+    assert activity_3.last_seen_channel_id is None
+    assert activity_3.last_seen_type is None
+
+    await service.handle_voice_state_update("1", "100", "c2", None, "Val")
+    activity_4 = await storage.activity.get("1", "100")
+    assert activity_4 is not None
+    assert activity_4.last_seen_channel_id == "c2"
+    assert activity_4.last_seen_type is not None
+    assert activity_4.last_seen_type.value == "voice_leave"
+    assert activity_4.last_seen_at_utc is not None
 
     await storage.close()

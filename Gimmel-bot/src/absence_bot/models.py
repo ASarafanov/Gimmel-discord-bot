@@ -25,6 +25,7 @@ class TrackMode(str, Enum):
 class LastSeenType(str, Enum):
     VOICE_JOIN = "voice_join"
     VOICE_MOVE = "voice_move"
+    VOICE_LEAVE = "voice_leave"
     MESSAGE = "message"
 
 
@@ -95,6 +96,7 @@ class VoiceTransition:
     should_update: bool
     event_type: Optional[LastSeenType]
     new_last_voice_channel_id: Optional[str]
+    last_seen_channel_id: Optional[str]
 
 
 @dataclass

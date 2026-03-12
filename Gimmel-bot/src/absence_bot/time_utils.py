@@ -36,10 +36,11 @@ def validate_daily_time(value: str) -> None:
 
 
 def calculate_absence_days(last_seen_at_utc: str, report_at_utc: datetime, tz_name: str) -> int:
-    tz = ZoneInfo(tz_name)
-    last_seen_local = parse_utc_iso(last_seen_at_utc).astimezone(tz).date()
-    report_local = report_at_utc.astimezone(tz).date()
-    return (report_local - last_seen_local).days
+    _ = tz_name
+    delta = report_at_utc.astimezone(timezone.utc) - parse_utc_iso(last_seen_at_utc)
+    if delta.total_seconds() < 0:
+        return 0
+    return int(delta.total_seconds() // 86400)
 
 
 def format_local_date(utc_iso_value: Optional[str], tz_name: str) -> Optional[str]:
