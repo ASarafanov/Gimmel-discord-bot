@@ -69,25 +69,25 @@ PYTHONPATH=src pytest
 
 ## Команды бота
 
-Админ-команды:
+Админ-команды и примеры:
 
-- `/absence add user:<user> [display_name_override:<text>]` - добавить пользователя в отслеживание.
-- `/absence remove user:<user>` - убрать пользователя из отслеживания.
-- `/absence list [page:<int>]` - показать список отслеживаемых пользователей и их статус.
-- `/absence enable` - включить ежедневную отправку отчётов для сервера.
-- `/absence disable` - отключить ежедневную отправку отчётов для сервера.
-- `/absence configure-channel channel:<text_channel>` - выбрать канал, куда бот публикует отчёты.
-- `/absence set-timezone tz:<IANA_TZ>` - установить таймзону сервера (например, `Europe/Moscow`).
-- `/absence set-template template:<text>` - задать шаблон текста отчёта.
-- `/absence set-post-mode mode:<single|per_user>` - выбрать формат публикации: один сводный пост или отдельный пост по каждому пользователю.
-- `/absence set-mention-mode mode:<no_ping|ping>` - включить/выключить реальные пинги пользователей.
-- `/absence run` - вручную запустить отчёт прямо сейчас (имитация плановой отправки).
+- `/absence add user:<user> [display_name_override:<text>]` - добавить пользователя в отслеживание. Пример: `/absence add user:@Valeria display_name_override:Валерий`.
+- `/absence remove user:<user>` - убрать пользователя из отслеживания. Пример: `/absence remove user:@Valeria`.
+- `/absence list [page:<int>]` - показать список отслеживаемых пользователей и их статус. Пример: `/absence list page:1`.
+- `/absence enable` - включить ежедневную отправку отчётов для сервера. Пример: `/absence enable`.
+- `/absence disable` - отключить ежедневную отправку отчётов для сервера. Пример: `/absence disable`.
+- `/absence configure-channel channel:<text_channel>` - выбрать канал, куда бот публикует отчёты. Пример: `/absence configure-channel channel:#daily-absence`.
+- `/absence set-timezone tz:<IANA_TZ>` - установить таймзону сервера. Пример: `/absence set-timezone tz:Europe/Moscow`.
+- `/absence set-template template:<text>` - задать шаблон текста отчёта. Пример: `/absence set-template template:Прошло **{days} {days_word}** с момента как {user_mention} покинул нас.`.
+- `/absence set-post-mode mode:<single|per_user>` - выбрать формат публикации: один сводный пост или отдельный пост по каждому пользователю. Пример: `/absence set-post-mode mode:single`.
+- `/absence set-mention-mode mode:<no_ping|ping>` - включить/выключить реальные пинги пользователей. Пример: `/absence set-mention-mode mode:no_ping`.
+- `/absence run` - вручную запустить отчёт прямо сейчас (имитация плановой отправки). Пример: `/absence run`.
 
-Пользовательские:
+Пользовательские команды и примеры:
 
-- `/absence optout mode:<enable|disable> [reason:<text>]` - включить или выключить отказ от отслеживания себя.
-- `/absence status` - показать, отслеживается ли пользователь, есть ли opt-out и какая дата последнего визита сохранена.
-- `/absence privacy` - показать, какие данные хранит бот и как работает политика удаления.
+- `/absence optout mode:<enable|disable> [reason:<text>]` - включить или выключить отказ от отслеживания себя. Пример: `/absence optout mode:enable reason:Не хочу участвовать`.
+- `/absence status` - показать, отслеживается ли пользователь, есть ли opt-out и какая дата последнего визита сохранена. Пример: `/absence status`.
+- `/absence privacy` - показать, какие данные хранит бот и как работает политика удаления. Пример: `/absence privacy`.
 
 ## Какие данные вводить в командах и как считаются дни
 
